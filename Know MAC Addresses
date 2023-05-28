@@ -1,0 +1,29 @@
+# Define the computer names or IP addresses to query
+
+$computers = "COMPUTER1", "192.168.1.100"
+
+# Loop through each computer
+
+foreach ($computer in $computers) {
+
+    # Get the network adapters on the computer
+
+    $adapters = Get-WmiObject Win32_NetworkAdapterConfiguration -ComputerName $computer | Where-Object {$_.IPEnabled}
+
+    # Loop through each adapter and get its MAC address
+
+    foreach ($adapter in $adapters) {
+
+        $macAddress = $adapter.MACAddress
+
+        Write-Host "MAC Address for $computer: $macAddress"
+
+    }
+
+    # Get the serial number of the computer
+
+    $serialNumber = (Get-WmiObject Win32_BIOS -ComputerName $computer).SerialNumber
+
+    Write-Host "Serial Number for $computer: $serialNumber"
+
+}
